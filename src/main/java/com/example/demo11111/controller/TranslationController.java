@@ -2,7 +2,7 @@ package com.example.demo11111.controller;
 
 import com.example.demo11111.response.TranslationResponse;
 import com.example.demo11111.service.TranslationService;
-import com.example.demo11111.moduli.Translation;
+import com.example.demo11111.model.Translation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,4 +67,14 @@ public class TranslationController {
         translationService.deleteTranslationById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/byTargetLang")
+    public ResponseEntity<?> getTranslationsByTargetLang(@RequestParam String targetLang) {
+        List<Translation> translations = translationService.getTranslationsByTargetLang(targetLang);
+        if (translations.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Переводы для языка " + targetLang + " не найдены");
+        }
+        return ResponseEntity.ok(translations);
+    }
+
 }

@@ -1,7 +1,8 @@
 package com.example.demo11111.service;
 
 
-import com.example.demo11111.moduli.Translation;
+import com.example.demo11111.cache.TranslationCache;
+import com.example.demo11111.model.Translation;
 import com.example.demo11111.repository.TranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,26 @@ public class TranslationService {
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при переводе текста: " + e.getMessage(), e);
         }
+    }
+
+    @Autowired
+    private TranslationCache translationCache;  // Внедряем кэш
+
+    // Метод для получения переводов по targetLang с использованием кэша
+    public List<Translation> getTranslationsByTargetLang(String targetLang) {
+        // Проверяем, есть ли данные в кэше
+        List<Translation> cachedTranslations = translationCache.get(targetLang);
+        if (cachedTranslations != null) {
+            return cachedTranslations;  // Возвращаем данные из кэша
+        }
+
+        // Если данных в кэше нет, выполняем запрос к базе данных
+        List<Translation> translations = translationRepository.findByTargetLang(targetLang);
+
+        // Сохраняем результат в кэше
+        translationCache.put(targetLang, translations);
+
+        return translations;
     }
 
     public List<Translation> getAllTranslations() {

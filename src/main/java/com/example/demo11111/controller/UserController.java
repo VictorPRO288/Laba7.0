@@ -1,7 +1,7 @@
 package com.example.demo11111.controller;
 
 import com.example.demo11111.service.UserService;
-import com.example.demo11111.moduli.User;
+import com.example.demo11111.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
