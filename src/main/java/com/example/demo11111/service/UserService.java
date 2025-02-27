@@ -1,7 +1,7 @@
 package com.example.demo11111.service;
 
-import com.example.demo11111.moduli.Translation;
-import com.example.demo11111.moduli.User;
+import com.example.demo11111.model.Translation;
+import com.example.demo11111.model.User;
 import com.example.demo11111.repository.TranslationRepository;
 import com.example.demo11111.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.example.demo11111.controller;
 
 import com.example.demo11111.response.TranslationResponse;
 import com.example.demo11111.service.TranslationService;
-import com.example.demo11111.moduli.Translation;
+import com.example.demo11111.model.Translation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
