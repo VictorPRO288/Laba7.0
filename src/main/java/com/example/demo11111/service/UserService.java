@@ -17,7 +17,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private TranslationRepository translationRepository; // Добавлено
+    private TranslationRepository translationRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

@@ -47,14 +47,14 @@ public class TranslationService {
     }
 
     @Autowired
-    private TranslationCache translationCache;  // Внедряем кэш
+    private TranslationCache translationCache;
 
     // Метод для получения переводов по targetLang с использованием кэша
     public List<Translation> getTranslationsByTargetLang(String targetLang) {
         // Проверяем, есть ли данные в кэше
         List<Translation> cachedTranslations = translationCache.get(targetLang);
         if (cachedTranslations != null) {
-            return cachedTranslations;  // Возвращаем данные из кэша
+            return cachedTranslations;
         }
 
         // Если данных в кэше нет, выполняем запрос к базе данных

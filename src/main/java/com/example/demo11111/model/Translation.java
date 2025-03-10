@@ -1,10 +1,8 @@
 package com.example.demo11111.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +23,5 @@ public class Translation {
     private String targetLang;
 
     @ManyToMany(mappedBy = "translations")
-    @JsonBackReference
-    private List<User> users = new ArrayList<>();
+    private List<User> users;
 }
