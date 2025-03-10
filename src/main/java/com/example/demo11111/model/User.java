@@ -1,10 +1,8 @@
 package com.example.demo11111.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,6 +26,5 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "translation_id")
     )
-    @JsonManagedReference
-    private List<Translation> translations = new ArrayList<>();
+    private List<Translation> translations;
 }
