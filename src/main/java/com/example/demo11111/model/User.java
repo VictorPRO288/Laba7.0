@@ -1,9 +1,11 @@
 package com.example.demo11111.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -13,6 +15,7 @@ public class User {
     private String name;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "user_translation",
             joinColumns = @JoinColumn(name = "user_id"),

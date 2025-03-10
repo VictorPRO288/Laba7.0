@@ -1,5 +1,6 @@
 package com.example.demo11111.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class Translation {
     private String targetLang;
 
     @ManyToMany(mappedBy = "translations")
+    @JsonIgnore
     private List<User> users;
 
     // Геттеры и сеттеры
