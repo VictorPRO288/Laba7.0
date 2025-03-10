@@ -1,5 +1,6 @@
 package com.example.demo11111.controller;
 
+import com.example.demo11111.dto.BulkTranslationRequest;
 import com.example.demo11111.response.TranslationResponse;
 import com.example.demo11111.service.TranslationService;
 import com.example.demo11111.model.Translation;
@@ -18,6 +19,12 @@ public class TranslationController {
 
     @Autowired
     private TranslationService translationService;
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Translation>> translateBulk(@RequestBody BulkTranslationRequest request) {
+        List<Translation> translations = translationService.translateBulk(request);
+        return ResponseEntity.ok(translations);
+    }
 
     @GetMapping("/text")
     public ResponseEntity<?> translateText(

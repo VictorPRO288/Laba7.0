@@ -2,6 +2,7 @@ package com.example.demo11111.service;
 
 
 import com.example.demo11111.cache.TranslationCache;
+import com.example.demo11111.dto.BulkTranslationRequest;
 import com.example.demo11111.model.Translation;
 import com.example.demo11111.repository.TranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TranslationService {
@@ -24,6 +26,12 @@ public class TranslationService {
 
     @Autowired
     private TranslationRepository translationRepository;
+
+    public List<Translation> translateBulk(BulkTranslationRequest request) {
+        return request.getTexts().stream()
+                .map(text -> translateAndSave(text, request.getSourceLang(), request.getTargetLang()))
+                .collect(Collectors.toList());
+    }
 
     public Translation translateAndSave(String text, String sourceLang, String targetLang) {
         try {
@@ -77,4 +85,6 @@ public class TranslationService {
     public void deleteTranslationById(Integer id) {
         translationRepository.deleteById(id);
     }
+
+
 }
