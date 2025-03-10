@@ -1,16 +1,9 @@
 package com.example.demo11111.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.List;
 
 @Entity
-@Table(name = "users")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
     @Id
@@ -18,7 +11,6 @@ public class User {
     private Integer id;
 
     private String name;
-    private String surname;
 
     @ManyToMany
     @JoinTable(
@@ -27,4 +19,26 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "translation_id")
     )
     private List<Translation> translations;
+
+    // Геттеры и сеттеры
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Translation> getTranslations() {
+        return translations;
+    }
+    public void setTranslations(List<Translation> translations) {
+        this.translations = translations;
+    }
 }
