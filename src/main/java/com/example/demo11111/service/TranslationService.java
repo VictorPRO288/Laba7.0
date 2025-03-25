@@ -1,6 +1,5 @@
 package com.example.demo11111.service;
 
-
 import com.example.demo11111.cache.TranslationCache;
 import com.example.demo11111.dto.BulkTranslationRequest;
 import com.example.demo11111.model.Translation;
@@ -23,17 +22,30 @@ public class TranslationService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RequestCounterService requestCounterService;
+    private final TranslationRepository translationRepository;
+    private final TranslationCache translationCache;
 
     @Autowired
-    private TranslationRepository translationRepository;
+    public TranslationService(TranslationRepository translationRepository,
+                              TranslationCache translationCache,
+                              RequestCounterService requestCounterService) {
+        this.translationRepository = translationRepository;
+        this.translationCache = translationCache;
+        this.requestCounterService = requestCounterService;
+    }
 
     public List<Translation> translateBulk(BulkTranslationRequest request) {
         return request.getTexts().stream()
-                .map(text -> translateAndSave(text, request.getSourceLang(), request.getTargetLang()))
+                .map(text -> {
+                    requestCounterService.increment();
+                    return translateAndSave(text, request.getSourceLang(), request.getTargetLang());
+                })
                 .collect(Collectors.toList());
     }
 
     public Translation translateAndSave(String text, String sourceLang, String targetLang) {
+        requestCounterService.increment(); // Увеличиваем счетчик обращений
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(
                     TRANSLATE_URL, String.class, sourceLang, targetLang, text);
@@ -54,37 +66,31 @@ public class TranslationService {
         }
     }
 
-    @Autowired
-    private TranslationCache translationCache;
-
-    // Метод для получения переводов по targetLang с использованием кэша
     public List<Translation> getTranslationsByTargetLang(String targetLang) {
-        // Проверяем, есть ли данные в кэше
+        requestCounterService.increment(); // Увеличиваем счетчик обращений
+
         List<Translation> cachedTranslations = translationCache.get(targetLang);
         if (cachedTranslations != null) {
             return cachedTranslations;
         }
 
-        // Если данных в кэше нет, выполняем запрос к базе данных
         List<Translation> translations = translationRepository.findByTargetLang(targetLang);
-
-        // Сохраняем результат в кэше
         translationCache.put(targetLang, translations);
-
         return translations;
     }
 
     public List<Translation> getAllTranslations() {
+        requestCounterService.increment(); // Увеличиваем счетчик обращений
         return translationRepository.findAll();
     }
 
     public Optional<Translation> getTranslationById(Integer id) {
+        requestCounterService.increment(); // Увеличиваем счетчик обращений
         return translationRepository.findById(id);
     }
 
     public void deleteTranslationById(Integer id) {
+        requestCounterService.increment(); // Увеличиваем счетчик обращений
         translationRepository.deleteById(id);
     }
-
-
 }
