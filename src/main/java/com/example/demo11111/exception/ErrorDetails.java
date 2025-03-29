@@ -14,15 +14,7 @@ public class ErrorDetails {
     }
 
     // Геттеры
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getDetails() {
-        return details;
-    }
+    public Date getTimestamp() { return timestamp; }
+    public String getMessage() { return message; }
+    public String getDetails() { return details; }
 }

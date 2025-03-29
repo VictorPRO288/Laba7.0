@@ -1,5 +1,6 @@
 package com.example.demo11111.controller;
 
+import com.example.demo11111.exception.ErrorDetails;
 import com.example.demo11111.service.UserService;
 import com.example.demo11111.model.User;
 
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,5 +80,15 @@ public class UserController {
             @PathVariable Integer translationId) {
         userService.removeTranslationFromUser(userId, translationId);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsersList() {
+        try {
+            List<User> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorDetails(new Date(), "Failed to load users", e.getMessage()));
+        }
     }
 }

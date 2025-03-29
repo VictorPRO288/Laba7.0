@@ -3,6 +3,7 @@ package com.example.demo11111.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Translation {
@@ -20,7 +21,17 @@ public class Translation {
     @JsonIgnore
     private List<User> users;
 
-    // Геттеры и сеттеры
+    public static final Map<String, String> SUPPORTED_LANGUAGES = Map.of(
+            "en", "English",
+            "ru", "Russian",
+            "es", "Spanish",
+            "fr", "French",
+            "de", "German",
+            "it", "Italian",
+            "ja", "Japanese",
+            "zh", "Chinese"
+    );
+
     public Integer getId() {
         return id;
     }

@@ -1,87 +1,115 @@
 package com.example.demo11111.controller;
 
 import com.example.demo11111.dto.BulkTranslationRequest;
-import com.example.demo11111.response.TranslationResponse;
-import com.example.demo11111.service.TranslationService;
+import com.example.demo11111.dto.TranslationRequest;
+import com.example.demo11111.exception.ErrorDetails;
 import com.example.demo11111.model.Translation;
-
+import com.example.demo11111.service.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/translate")
+@RequestMapping("/api/translations")
 public class TranslationController {
 
     @Autowired
     private TranslationService translationService;
 
-    @PostMapping("/bulk")
-    public ResponseEntity<List<Translation>> translateBulk(@RequestBody BulkTranslationRequest request) {
-        List<Translation> translations = translationService.translateBulk(request);
-        return ResponseEntity.ok(translations);
+    @GetMapping("/languages")
+    public Map<String, String> getSupportedLanguages() {
+        return Translation.SUPPORTED_LANGUAGES;
     }
 
-    @GetMapping("/text")
-    public ResponseEntity<?> translateText(
-            @RequestParam String text,
-            @RequestParam String sourceLang,
-            @RequestParam String targetLang) {
+    @PostMapping
+    public ResponseEntity<Translation> createTranslation(
+            @RequestBody TranslationRequest request) {
         try {
-            Translation translation = translationService.translateAndSave(text, sourceLang, targetLang);
-            TranslationResponse response = new TranslationResponse(
-                    translation.getOriginalText(),
-                    translation.getTranslatedText(),
-                    translation.getSourceLang(),
-                    translation.getTargetLang());
-            return ResponseEntity.ok(response);
+            Translation translation = translationService.translateAndSave(
+                    request.getText(),
+                    request.getSourceLang(),
+                    request.getTargetLang()
+            );
+            return ResponseEntity.ok(translation);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ошибка: " + e.getMessage());
+            return ResponseEntity.status(500).body(null);
         }
     }
 
-    @GetMapping("/{translationId}/users")
-    public ResponseEntity<?> getUsersByTranslationId(@PathVariable Integer translationId) {
-        Optional<Translation> translation = translationService.getTranslationById(translationId);
-        if (translation.isPresent()) {
-            return ResponseEntity.ok(translation.get().getUsers());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Перевод с ID " + translationId + " не найден");
+    @GetMapping
+    public ResponseEntity<?> getAllTranslations() {
+        try {
+            List<Translation> translations = translationService.getAllTranslations();
+            return ResponseEntity.ok(translations);
+        } catch (Exception e) {
+            return handleException(e);
         }
     }
 
-    @GetMapping("/all")
-    public List<Translation> getAllTranslations() {
-        return translationService.getAllTranslations();
-    }
-
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getTranslationById(@PathVariable Integer id) {
-        Optional<Translation> translation = translationService.getTranslationById(id);
-        if (translation.isPresent()) {
-            return ResponseEntity.ok(translation.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Перевод с ID " + id + " не найден");
+        try {
+            return translationService.getTranslationById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    @GetMapping("/by-language")
+    public ResponseEntity<?> getTranslationsByTargetLang(@RequestParam String targetLang) {
+        try {
+            List<Translation> translations = translationService.getTranslationsByTargetLang(targetLang);
+            if (translations.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ErrorDetails(new Date(), "No translations found for language: " + targetLang, ""));
+            }
+            return ResponseEntity.ok(translations);
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    @GetMapping("/{id}/users")
+    public ResponseEntity<?> getUsersByTranslationId(@PathVariable Integer id) {
+        try {
+            return translationService.getTranslationById(id)
+                    .map(translation -> ResponseEntity.ok(translation.getUsers()))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<?> translateBulk(@RequestBody BulkTranslationRequest request) {
+        try {
+            List<Translation> translations = translationService.translateBulk(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(translations);
+        } catch (Exception e) {
+            return handleException(e);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTranslationById(@PathVariable Integer id) {
-        translationService.deleteTranslationById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/byTargetLang")
-    public ResponseEntity<?> getTranslationsByTargetLang(@RequestParam String targetLang) {
-        List<Translation> translations = translationService.getTranslationsByTargetLang(targetLang);
-        if (translations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Переводы для языка " + targetLang + " не найдены");
+    public ResponseEntity<?> deleteTranslation(@PathVariable Integer id) {
+        try {
+            translationService.deleteTranslationById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return handleException(e);
         }
-        return ResponseEntity.ok(translations);
     }
 
+    private ResponseEntity<ErrorDetails> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorDetails(new Date(), "An error occurred", e.getMessage()));
+    }
 }
