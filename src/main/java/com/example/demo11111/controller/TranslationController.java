@@ -59,7 +59,7 @@ public class TranslationController {
         return translationService.getAllTranslations();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public ResponseEntity<?> getTranslationById(@PathVariable Integer id) {
         Optional<Translation> translation = translationService.getTranslationById(id);
         if (translation.isPresent()) {

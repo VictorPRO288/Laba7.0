@@ -36,16 +36,20 @@ public class TranslationService {
     }
 
     public List<Translation> translateBulk(BulkTranslationRequest request) {
+        requestCounterService.increment();
         return request.getTexts().stream()
-                .map(text -> {
-                    requestCounterService.increment();
-                    return translateAndSave(text, request.getSourceLang(), request.getTargetLang());
-                })
+                .map(text -> translateText(text, request.getSourceLang(), request.getTargetLang()))
+                .map(this::saveTranslation)
                 .collect(Collectors.toList());
     }
 
     public Translation translateAndSave(String text, String sourceLang, String targetLang) {
-        requestCounterService.increment(); // Увеличиваем счетчик обращений
+        requestCounterService.increment();
+        Translation translation = translateText(text, sourceLang, targetLang);
+        return saveTranslation(translation);
+    }
+
+    private Translation translateText(String text, String sourceLang, String targetLang) {
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(
                     TRANSLATE_URL, String.class, sourceLang, targetLang, text);
@@ -60,14 +64,18 @@ public class TranslationService {
             translation.setSourceLang(sourceLang);
             translation.setTargetLang(targetLang);
 
-            return translationRepository.save(translation);
+            return translation;
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при переводе текста: " + e.getMessage(), e);
         }
     }
 
+    private Translation saveTranslation(Translation translation) {
+        return translationRepository.save(translation);
+    }
+
     public List<Translation> getTranslationsByTargetLang(String targetLang) {
-        requestCounterService.increment(); // Увеличиваем счетчик обращений
+        requestCounterService.increment();
 
         List<Translation> cachedTranslations = translationCache.get(targetLang);
         if (cachedTranslations != null) {
@@ -80,17 +88,17 @@ public class TranslationService {
     }
 
     public List<Translation> getAllTranslations() {
-        requestCounterService.increment(); // Увеличиваем счетчик обращений
+        requestCounterService.increment();
         return translationRepository.findAll();
     }
 
     public Optional<Translation> getTranslationById(Integer id) {
-        requestCounterService.increment(); // Увеличиваем счетчик обращений
+        requestCounterService.increment();
         return translationRepository.findById(id);
     }
 
     public void deleteTranslationById(Integer id) {
-        requestCounterService.increment(); // Увеличиваем счетчик обращений
+        requestCounterService.increment();
         translationRepository.deleteById(id);
     }
 }
