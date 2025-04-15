@@ -1,3 +1,10 @@
 [build]
-builder = "docker"
-dockerfile = "Dockerfile"
+command = "./mvnw -DskipTests clean package"
+outputDirectory = "target"
+
+[deploy]
+startCommand = "java -Dserver.port=$PORT -Xmx512m -jar target/demo11111-*.jar"
+
+[variables]
+PORT = "8080"
+JAVA_OPTS = "-Xmx512m"
