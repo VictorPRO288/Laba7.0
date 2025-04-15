@@ -1,0 +1,6 @@
+[build]
+command = "mvn -DskipTests clean package"
+outputDirectory = "target"
+
+[deploy]
+startCommand = "java -jar target/demo11111-0.0.1-SNAPSHOT.jar"
