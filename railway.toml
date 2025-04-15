@@ -3,4 +3,3 @@ builder = "docker"
 dockerfile = "Dockerfile"
 
 [deploy]
-startCommand = ""
