@@ -1,10 +1,32 @@
 [build]
-command = "./mvnw -DskipTests clean package"
-outputDirectory = "target"
+# Билдим оба проекта
+command = """
+  cd backend && ./mvnw -DskipTests clean package && \
+  cd ../frontend && npm install && npm run build
+"""
+outputDirectory = "backend/target"  # Где лежит бэкенд JAR
 
 [deploy]
-startCommand = "java -Dserver.port=$PORT -Xmx512m -jar target/demo11111-*.jar"
+# Сначала запускаем бэкенд, потом фронт через nginx
+startCommand = """
+  java -Dserver.port=$PORT -jar backend/target/demo11111-*.jar & \
+  serve -s frontend/build -l $FRONTEND_PORT
+"""
 
 [variables]
-PORT = "8080"
-JAVA_OPTS = "-Xmx512m"
+PORT = "8080"              # Порт для бэкенда
+FRONTEND_PORT = "3000"     # Порт для фронтенда
+DATABASE_URL = "${PostgreSQL.DATABASE_URL}"  # Для БД
+
+# Health-чеки
+[[healthchecks]]
+name = "backend"
+interval = 10
+timeout = 5
+path = "/health"
+
+[[healthchecks]]
+name = "frontend"
+interval = 15
+timeout = 5
+path = "/"
