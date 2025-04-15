@@ -2,22 +2,23 @@
 FROM maven:3.8.6-eclipse-temurin-17 AS backend-build
 WORKDIR /app
 
-# 1. Копируем только необходимые файлы для Maven Wrapper
+# 1. Сначала копируем ВСЮ папку .mvn целиком
+COPY .mvn ./.mvn
 COPY mvnw* ./
-COPY .mvn/wrapper/maven-wrapper.properties .mvn/wrapper/
-COPY .mvn/wrapper/maven-wrapper.jar .mvn/wrapper/
+COPY pom.xml ./
 
-# 2. Устанавливаем права (ключевое исправление для Windows)
+# 2. Устанавливаем права
 RUN chmod +x mvnw && \
     chmod -R 755 .mvn
 
-# 3. Копируем POM и исходники
-COPY pom.xml ./
+# 3. Копируем исходники
 COPY src ./src
 
-# 4. Собираем проект (с кэшированием зависимостей)
+# 4. Собираем проект
 RUN ./mvnw -B dependency:resolve
 RUN ./mvnw -B package -DskipTests
+
+# Остальная часть Dockerfile остается без изменений
 
 # Билд фронтенда
 FROM node:18 AS frontend-build
