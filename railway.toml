@@ -7,8 +7,8 @@ outputDirectory = "backend/target"
 
 [deploy]
 startCommand = """
-  (java -Dserver.port=$PORT -jar backend/target/demo11111-*.jar) & \
-  (cd frontend && npx serve -s build -l $FRONTEND_PORT)
+  java -Dserver.port=$PORT -jar backend/target/demo11111-*.jar & \
+  cd frontend && npx serve -s build -l $FRONTEND_PORT
 """
 
 [variables]
