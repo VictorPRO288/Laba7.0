@@ -1,9 +1,10 @@
 [build]
-command = "cd frontend && npm install && npm run build"
+command = "cd frontend && npm install && npm install -g serve && npm run build"
 outputDirectory = "frontend/build"
 
 [deploy]
 startCommand = "cd frontend && npx serve -s build -l $PORT"
+
 
 [variables]
 PORT = "3000"
