@@ -1,0 +1,9 @@
+[build]
+command = "cd backend && ./mvnw -DskipTests clean package"
+outputDirectory = "backend/target"
+
+[deploy]
+startCommand = "java -Dserver.port=$PORT -jar backend/target/demo11111-*.jar"
+
+[variables]
+PORT = "8080"
