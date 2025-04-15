@@ -2,9 +2,7 @@ package com.example.demo11111.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 
-@Data
 public class TranslationRequest {
     @NotBlank
     private String text;
@@ -14,4 +12,29 @@ public class TranslationRequest {
 
     @Size(min = 2, max = 5)
     private String targetLang;
+
+    // Геттеры и сеттеры
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getSourceLang() {
+        return sourceLang;
+    }
+
+    public void setSourceLang(String sourceLang) {
+        this.sourceLang = sourceLang;
+    }
+
+    public String getTargetLang() {
+        return targetLang;
+    }
+
+    public void setTargetLang(String targetLang) {
+        this.targetLang = targetLang;
+    }
 }
