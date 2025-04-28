@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translater</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Переводчик</h1>
+            <div class="switch-panel">
+                <button id="switchUsers" class="active">Пользователи</button>
+                <button id="switchTranslations">Переводы</button>
+            </div>
+        </header>
+        <main>
+            <section id="usersPanel" class="crud-panel">
+                <div class="form-block">
+                    <input type="text" id="inputField" placeholder="Введите имя пользователя...">
+                    <button id="addBtn">Добавить</button>
+                </div>
+                <ul id="itemsList"></ul>
+            </section>
+            <section id="translationsPanel" class="translate-panel" style="display:none">
+                <div class="lang-row">
+                    <select id="inputSourceLang">
+                        <option value="en">Английский</option>
+                        <option value="ru">Русский</option>
+                        <option value="es">Испанский</option>
+                        <option value="fr">Французский</option>
+                        <option value="de">Немецкий</option>
+                        <option value="it">Итальянский</option>
+                        <option value="ja">Японский</option>
+                        <option value="zh">Китайский</option>
+                    </select>
+                    <button id="swapLangs" title="Поменять языки">⇄</button>
+                    <select id="inputTargetLang">
+                        <option value="ru">Русский</option>
+                        <option value="en">Английский</option>
+                        <option value="es">Испанский</option>
+                        <option value="fr">Французский</option>
+                        <option value="de">Немецкий</option>
+                        <option value="it">Итальянский</option>
+                        <option value="ja">Японский</option>
+                        <option value="zh">Китайский</option>
+                    </select>
+                </div>
+                <div class="translate-row">
+                    <textarea id="inputFieldTranslation" placeholder="Введите текст" rows="6"></textarea>
+                    <div class="arrow">→</div>
+                    <textarea id="outputFieldTranslation" placeholder="Перевод" rows="6" readonly></textarea>
+                </div>
+                <div class="translate-actions">
+                    <button id="addTranslationBtn">Перевести и сохранить</button>
+                </div>
+                <ul id="translationsList"></ul>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+    <img src="bg.jpg" alt="background" style="display:none;">
+</body>
+</html> 
