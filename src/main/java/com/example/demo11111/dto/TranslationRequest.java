@@ -13,7 +13,6 @@ public class TranslationRequest {
     @Size(min = 2, max = 5)
     private String targetLang;
 
-    // Геттеры и сеттеры
     public String getText() {
         return text;
     }

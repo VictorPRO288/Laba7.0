@@ -35,7 +35,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    // Метод для добавления перевода пользователю
     public void addTranslationToUser(Integer userId, Integer translationId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
@@ -49,7 +48,6 @@ public class UserService {
         translationRepository.save(translation);
     }
 
-    // Метод для удаления перевода у пользователя
     public void removeTranslationFromUser(Integer userId, Integer translationId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));

@@ -13,7 +13,6 @@ public class ErrorDetails {
         this.details = details;
     }
 
-    // Геттеры
     public Date getTimestamp() { return timestamp; }
     public String getMessage() { return message; }
     public String getDetails() { return details; }

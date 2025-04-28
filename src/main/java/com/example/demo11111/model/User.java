@@ -23,7 +23,6 @@ public class User {
     )
     private List<Translation> translations;
 
-    // Геттеры и сеттеры
     public Integer getId() {
         return id;
     }
