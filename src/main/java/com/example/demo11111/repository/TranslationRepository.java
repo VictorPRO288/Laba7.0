@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface TranslationRepository extends JpaRepository<Translation, Integer> {
 
-    // Кастомный запрос для поиска переводов по targetLang
     @Query("SELECT t FROM Translation t WHERE t.targetLang = :targetLang")
     List<Translation> findByTargetLang(@Param("targetLang") String targetLang);
 }
