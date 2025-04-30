@@ -6,16 +6,16 @@ const switchTranslations = document.getElementById('switchTranslations');
 
 switchUsers.onclick = () => {
     mode = 'users';
-    usersPanel.style.display = '';
-    translationsPanel.style.display = 'none';
+    usersPanel.classList.remove('hidden');
+    translationsPanel.classList.add('hidden');
     switchUsers.classList.add('active');
     switchTranslations.classList.remove('active');
 };
 
 switchTranslations.onclick = () => {
     mode = 'translations';
-    usersPanel.style.display = 'none';
-    translationsPanel.style.display = '';
+    usersPanel.classList.add('hidden');
+    translationsPanel.classList.remove('hidden');
     switchUsers.classList.remove('active');
     switchTranslations.classList.add('active');
 };
