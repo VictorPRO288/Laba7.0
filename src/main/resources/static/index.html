@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translater</title>
+    <title>Переводчик</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,9 +16,9 @@
             </div>
         </header>
         <main>
-            <section id="usersPanel" class="crud-panel">
+            <section id="usersPanel">
                 <div class="form-block">
-                    <input type="text" id="inputField" placeholder="Введите имя пользователя...">
+                    <input type="text" id="inputField" placeholder="Введите имя">
                     <button id="addBtn">Добавить</button>
                 </div>
                 <ul id="itemsList"></ul>
@@ -35,7 +35,7 @@
                         <option value="ja">Японский</option>
                         <option value="zh">Китайский</option>
                     </select>
-                    <button id="swapLangs" title="Поменять языки">⇄</button>
+                    <button id="swapLangs">⇄</button>
                     <select id="inputTargetLang">
                         <option value="ru">Русский</option>
                         <option value="en">Английский</option>
@@ -48,18 +48,16 @@
                     </select>
                 </div>
                 <div class="translate-row">
-                    <textarea id="inputFieldTranslation" placeholder="Введите текст" rows="6"></textarea>
+                    <textarea id="inputFieldTranslation" placeholder="Введите текст"></textarea>
                     <div class="arrow">→</div>
-                    <textarea id="outputFieldTranslation" placeholder="Перевод" rows="6" readonly></textarea>
+                    <textarea id="outputFieldTranslation" placeholder="Перевод" readonly></textarea>
                 </div>
-                <div class="translate-actions">
-                    <button id="addTranslationBtn">Перевести и сохранить</button>
-                </div>
+                <button id="addTranslationBtn">Перевести</button>
                 <ul id="translationsList"></ul>
             </section>
         </main>
     </div>
     <script src="app.js"></script>
-    <img src="bg.jpg" alt="background" style="display:none;">
+    <img src="bg.jpg" alt="background" style="display:none">
 </body>
 </html> 
