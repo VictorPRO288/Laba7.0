@@ -90,10 +90,10 @@ h1 {
 
 input[type="text"], select, textarea {
     flex: 1;
-    padding: 14px 20px;
-    border: 2px solid rgba(139, 92, 246, 0.2);
+    padding: 10px 20px;
+    border: 0px solid rgba(139, 92, 246, 0.2);
     border-radius: 16px;
-    font-size: 1rem;
+    font-size: 1.928rem;
     background: white;
     color: var(--text);
     transition: all 0.3s ease;
@@ -130,47 +130,92 @@ button:hover {
 
 #itemsList li, #translationsList li {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
+    justify-content: space-between;
+    padding: 12px 20px;
     background: white;
     border-radius: 16px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    font-size: 1.1rem;
+    transition: transform 0.3s;
+    min-height: 48px;
 }
 
-#itemsList li:hover, #translationsList li:hover {
-    transform: translateX(5px);
+#itemsList li span, #translationsList li span {
+    flex: 1 1 auto;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+#itemsList li .btn-group, #translationsList li .btn-group {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 #itemsList li button, #translationsList li button {
-    padding: 8px 16px;
-    margin-left: 10px;
-    font-size: 0.9rem;
-    opacity: 0.9;
+    padding: 0 18px;
+    min-width: 80px;
+    height: 38px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #222;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #itemsList li button:hover, #translationsList li button:hover {
-    opacity: 1;
+    filter: brightness(1.08);
 }
 
 .lang-select {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     gap: 16px;
     margin-bottom: 24px;
 }
 
+.lang-select select {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 48px;
+    font-size: 1.1rem;
+    border-radius: 16px;
+    padding: 0 16px;
+    background: #fff;
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    color: var(--text);
+}
+
 #swapLangs {
-    padding: 12px;
-    font-size: 1.2rem;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0;
+    font-size: 1.5rem;
     border-radius: 50%;
-    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    margin: 0 4px;
 }
 
 .translate-area {
@@ -205,7 +250,6 @@ textarea {
 .hidden {
     display: none;
 }
-
 @media (max-width: 768px) {
     .container {
         margin: 20px;
@@ -220,4 +264,18 @@ textarea {
         transform: rotate(90deg);
         padding: 12px 0;
     }
+    #itemsList li, #translationsList li {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px 8px;
+    }
+    #itemsList li .btn-group, #translationsList li .btn-group {
+        justify-content: flex-end;
+        margin-top: 8px;
+    }
+}
+
+.lang-select select,
+.lang-select button {
+    margin-bottom: 8px;
 }

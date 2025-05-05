@@ -2,63 +2,53 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Переводчик</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Переводчик</h1>
-            <div class="tabs">
-                <button id="switchUsers" class="active">Пользователи</button>
-                <button id="switchTranslations">Переводы</button>
+        <h1>Переводчик</h1>
+        <div>
+            <button id="switchUsers">Пользователи</button>
+            <button id="switchTranslations">Переводы</button>
+        </div>
+
+        <div id="usersPanel">
+            <input type="text" id="inputField" placeholder="Введите имя">
+            <button id="addBtn">Добавить</button>
+            <ul id="itemsList"></ul>
+        </div>
+
+        <div id="translationsPanel" class="hidden">
+            <div class="lang-select">
+                <select id="inputSourceLang">
+                    <option value="en">Английский</option>
+                    <option value="ru">Русский</option>
+                    <option value="es">Испанский</option>
+                    <option value="fr">Французский</option>
+                    <option value="de">Немецкий</option>
+                    <option value="ja">Японский</option>
+                    <option value="it">Итальянский</option>
+                </select>
+                <button id="swapLangs">⇄</button>
+                <select id="inputTargetLang">
+                    <option value="ru">Русский</option>
+                    <option value="en">Английский</option>
+                    <option value="es">Испанский</option>
+                    <option value="fr">Французский</option>
+                    <option value="de">Немецкий</option>
+                    <option value="ja">Японский</option>
+                    <option value="it">Итальянский</option>
+                </select>
             </div>
-        </header>
 
-        <main>
-            <section id="usersPanel">
-                <div class="input-group">
-                    <input type="text" id="inputField" placeholder="Введите имя">
-                    <button id="addBtn">Добавить</button>
-                </div>
-                <ul id="itemsList"></ul>
-            </section>
+            <textarea id="inputFieldTranslation" placeholder="Введите текст"></textarea>
+            <textarea id="outputFieldTranslation" placeholder="Перевод" readonly></textarea>
 
-            <section id="translationsPanel" class="hidden">
-                <div class="lang-select">
-                    <select id="inputSourceLang">
-                        <option value="en">Английский</option>
-                        <option value="ru">Русский</option>
-                        <option value="es">Испанский</option>
-                        <option value="fr">Французский</option>
-                        <option value="de">Немецкий</option>
-                        <option value="ja">Японский</option>
-                        <option value="it">Итальянский</option>
-                    </select>
-                    <button id="swapLangs">⇄</button>
-                    <select id="inputTargetLang">
-                        <option value="ru">Русский</option>
-                        <option value="en">Английский</option>
-                        <option value="es">Испанский</option>
-                        <option value="fr">Французский</option>
-                        <option value="de">Немецкий</option>
-                        <option value="ja">Японский</option>
-                        <option value="it">Итальянский</option>
-                    </select>
-                </div>
-
-                <div class="translate-area">
-                    <textarea id="inputFieldTranslation" placeholder="Введите текст"></textarea>
-                    <div class="arrow">→</div>
-                    <textarea id="outputFieldTranslation" placeholder="Перевод" readonly></textarea>
-                </div>
-
-                <button id="addTranslationBtn">Перевести</button>
-                <ul id="translationsList"></ul>
-            </section>
-        </main>
+            <button id="addTranslationBtn">Перевести</button>
+            <ul id="translationsList"></ul>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>
-</html> 
+</html>
