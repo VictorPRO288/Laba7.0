@@ -20,15 +20,12 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    /* font-family: 'Segoe UI', Arial, sans-serif; */
     background: 
         linear-gradient(120deg, rgb(94 142 40 / 37%) 0%, rgb(255 94 98 / 16%) 100%),
         url('https://avatars.mds.yandex.net/i?id=47b0c12dfa8a0a22282e2617097b44b2_l-11043615-images-thumbs&n=13') no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
 }
-
-
 .container {
     max-width: 800px;
     margin: 40px auto;
@@ -70,19 +67,19 @@ h1 {
     padding: 12px 32px;
     border: none;
     border-radius: 16px;
-    background: rgb(206 142 38 / 10%);
-    color: #000000cc;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #000;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgb(213 150 15 / 30%);
+    z-index: 1;
 }
 
-.tabs button.active, .tabs button:hover {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #000000;
+.tabs button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgb(213 150 15 / 30%);
+    filter: brightness(1.08);
 }
 
 .input-group {
@@ -113,7 +110,7 @@ button {
     border: none;
     border-radius: 16px;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;

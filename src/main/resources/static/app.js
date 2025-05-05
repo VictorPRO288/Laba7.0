@@ -24,16 +24,16 @@ switchUsers.onclick = function() {
     mode = 'users';
     usersPanel.style.display = 'block';
     translationsPanel.style.display = 'none';
-    switchUsers.style.backgroundColor = '#ddd';
-    switchTranslations.style.backgroundColor = '';
+    switchUsers.classList.add('active');
+    switchTranslations.classList.remove('active');
 };
 
 switchTranslations.onclick = function() {
     mode = 'translations';
     usersPanel.style.display = 'none';
     translationsPanel.style.display = 'block';
-    switchUsers.style.backgroundColor = '';
-    switchTranslations.style.backgroundColor = '#ddd';
+    switchTranslations.classList.add('active');
+    switchUsers.classList.remove('active');
 };
 
 var apiUrl = '/api/users';
