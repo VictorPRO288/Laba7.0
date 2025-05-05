@@ -1,150 +1,175 @@
-let mode = 'users';
-const usersPanel = document.getElementById('usersPanel');
-const translationsPanel = document.getElementById('translationsPanel');
-const switchUsers = document.getElementById('switchUsers');
-const switchTranslations = document.getElementById('switchTranslations');
+var mode = 'users';
+var usersPanel = document.getElementById('usersPanel');
+var translationsPanel = document.getElementById('translationsPanel');
+var switchUsers = document.getElementById('switchUsers');
+var switchTranslations = document.getElementById('switchTranslations');
 
-switchUsers.onclick = () => {
-    mode = 'users';
-    usersPanel.classList.remove('hidden');
-    translationsPanel.classList.add('hidden');
-    switchUsers.classList.add('active');
-    switchTranslations.classList.remove('active');
-};
-
-switchTranslations.onclick = () => {
-    mode = 'translations';
-    usersPanel.classList.add('hidden');
-    translationsPanel.classList.remove('hidden');
-    switchUsers.classList.remove('active');
-    switchTranslations.classList.add('active');
-};
-
-const apiUrl = '/api/users';
-const itemsList = document.getElementById('itemsList');
-const inputField = document.getElementById('inputField');
-const addBtn = document.getElementById('addBtn');
-
-async function getItems() {
-    try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        itemsList.innerHTML = '';
-        data.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${item.name}</span>
-                <span>
-                    <button onclick="changeItem(${item.id}, '${item.name}')">Изм.</button>
-                    <button onclick="removeItem(${item.id})">Удалить</button>
-                </span>
-            `;
-            itemsList.appendChild(li);
-        });
-    } catch (e) {
-        itemsList.innerHTML = '<li style="color:red">Ошибка загрузки</li>';
-    }
+function setBackground() {
+    var img = new Image();
+    img.onload = function() {
+        document.body.style.background = 'linear-gradient(120deg, rgba(106,48,147,0.5) 0%, rgba(255,94,98,0.3) 100%), url("sea-bg.jpg") no-repeat center center fixed';
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.minHeight = '100vh';
+    };
+    img.src = 'sea-bg.jpg';
 }
 
-addBtn.onclick = async () => {
-    const value = inputField.value.trim();
-    if (!value) return;
-    try {
-        const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: value })
+window.onload = function() {
+    setBackground();
+    getItems();
+    getTranslations();
+};
+
+switchUsers.onclick = function() {
+    mode = 'users';
+    usersPanel.style.display = 'block';
+    translationsPanel.style.display = 'none';
+    switchUsers.style.backgroundColor = '#ddd';
+    switchTranslations.style.backgroundColor = '';
+};
+
+switchTranslations.onclick = function() {
+    mode = 'translations';
+    usersPanel.style.display = 'none';
+    translationsPanel.style.display = 'block';
+    switchUsers.style.backgroundColor = '';
+    switchTranslations.style.backgroundColor = '#ddd';
+};
+
+var apiUrl = '/api/users';
+var itemsList = document.getElementById('itemsList');
+var inputField = document.getElementById('inputField');
+var addBtn = document.getElementById('addBtn');
+
+function getItems() {
+    fetch(apiUrl)
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            itemsList.innerHTML = '';
+            for(var i = 0; i < data.length; i++) {
+                var item = data[i];
+                var li = document.createElement('li');
+                li.innerHTML = '<span>' + item.name + '</span>' +
+                    '<span>' +
+                    '<button onclick="changeItem(' + item.id + ', \'' + item.name + '\')">Изм.</button>' +
+                    '<button onclick="removeItem(' + item.id + ')">Удалить</button>' +
+                    '</span>';
+                itemsList.appendChild(li);
+            }
+        })
+        .catch(function(error) {
+            itemsList.innerHTML = '<li style="color:red">Ошибка загрузки</li>';
         });
-        if (res.ok) {
+}
+
+addBtn.onclick = function() {
+    var value = inputField.value.trim();
+    if(value == '') return;
+    
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: value })
+    })
+    .then(function(response) {
+        if(response.ok) {
             inputField.value = '';
             getItems();
         }
-    } catch (e) { alert('Ошибка добавления'); }
+    })
+    .catch(function(error) { alert('Ошибка добавления'); });
 };
 
-async function changeItem(id, oldName) {
-    const newName = prompt('Новое имя:', oldName);
-    if (!newName || newName === oldName) return;
-    try {
-        const res = await fetch(`${apiUrl}/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: newName })
-        });
-        if (res.ok) getItems();
-    } catch (e) { alert('Ошибка обновления'); }
+function changeItem(id, oldName) {
+    var newName = prompt('Новое имя:', oldName);
+    if(newName == '' || newName == oldName) return;
+    
+    fetch(apiUrl + '/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName })
+    })
+    .then(function(response) {
+        if(response.ok) getItems();
+    })
+    .catch(function(error) { alert('Ошибка обновления'); });
 }
 
-async function removeItem(id) {
-    if (!confirm('Удалить пользователя?')) return;
-    try {
-        const res = await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
-        if (res.ok) getItems();
-    } catch (e) { alert('Ошибка удаления'); }
+function removeItem(id) {
+    if(!confirm('Удалить пользователя?')) return;
+    
+    fetch(apiUrl + '/' + id, { method: 'DELETE' })
+    .then(function(response) {
+        if(response.ok) getItems();
+    })
+    .catch(function(error) { alert('Ошибка удаления'); });
 }
 
-const translationsApiUrl = '/api/translations';
-const translationsList = document.getElementById('translationsList');
-const inputFieldTranslation = document.getElementById('inputFieldTranslation');
-const inputSourceLang = document.getElementById('inputSourceLang');
-const inputTargetLang = document.getElementById('inputTargetLang');
-const outputFieldTranslation = document.getElementById('outputFieldTranslation');
-const addTranslationBtn = document.getElementById('addTranslationBtn');
-const swapLangsBtn = document.getElementById('swapLangs');
+var translationsApiUrl = '/api/translations';
+var translationsList = document.getElementById('translationsList');
+var inputFieldTranslation = document.getElementById('inputFieldTranslation');
+var inputSourceLang = document.getElementById('inputSourceLang');
+var inputTargetLang = document.getElementById('inputTargetLang');
+var outputFieldTranslation = document.getElementById('outputFieldTranslation');
+var addTranslationBtn = document.getElementById('addTranslationBtn');
+var swapLangsBtn = document.getElementById('swapLangs');
 
-swapLangsBtn.onclick = () => {
-    const tmp = inputSourceLang.value;
+swapLangsBtn.onclick = function() {
+    var tmp = inputSourceLang.value;
     inputSourceLang.value = inputTargetLang.value;
     inputTargetLang.value = tmp;
 };
 
-addTranslationBtn.onclick = async () => {
-    const text = inputFieldTranslation.value.trim();
-    const sourceLang = inputSourceLang.value;
-    const targetLang = inputTargetLang.value;
-    if (!text) return;
-    try {
-        const res = await fetch(translationsApiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, sourceLang, targetLang })
-        });
-        if (res.ok) {
-            const data = await res.json();
-            outputFieldTranslation.value = data.translatedText || 'Перевод выполнен';
-            getTranslations();
+addTranslationBtn.onclick = function() {
+    var text = inputFieldTranslation.value.trim();
+    var sourceLang = inputSourceLang.value;
+    var targetLang = inputTargetLang.value;
+    if(text == '') return;
+    
+    fetch(translationsApiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text, sourceLang: sourceLang, targetLang: targetLang })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if(data.translatedText) {
+            outputFieldTranslation.value = data.translatedText;
         } else {
-            outputFieldTranslation.value = 'Ошибка перевода';
+            outputFieldTranslation.value = 'Перевод выполнен';
         }
-    } catch (e) {
-        outputFieldTranslation.value = 'Ошибка перевода';
-    }
+        getTranslations();
+    })
+    .catch(function(error) { outputFieldTranslation.value = 'Ошибка перевода'; });
 };
 
-async function getTranslations() {
-    try {
-        const res = await fetch(translationsApiUrl);
-        const data = await res.json();
-        translationsList.innerHTML = '';
-        data.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${item.originalText} → <b>${item.translatedText}</b> [${item.sourceLang}→${item.targetLang}]</span>
-                <button onclick="removeTranslation(${item.id})">Удалить</button>
-            `;
-            translationsList.appendChild(li);
+function getTranslations() {
+    fetch(translationsApiUrl)
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            translationsList.innerHTML = '';
+            for(var i = 0; i < data.length; i++) {
+                var item = data[i];
+                var li = document.createElement('li');
+                li.innerHTML = '<span>' + item.originalText + ' → <b>' + item.translatedText + '</b> [' + 
+                    item.sourceLang + '→' + item.targetLang + ']</span>' +
+                    '<button onclick="removeTranslation(' + item.id + ')">Удалить</button>';
+                translationsList.appendChild(li);
+            }
+        })
+        .catch(function(error) {
+            translationsList.innerHTML = '<li style="color:red">Ошибка загрузки</li>';
         });
-    } catch (e) {
-        translationsList.innerHTML = '<li style="color:red">Ошибка загрузки</li>';
-    }
 }
 
-async function removeTranslation(id) {
-    if (!confirm('Удалить перевод?')) return;
-    try {
-        const res = await fetch(`${translationsApiUrl}/${id}`, { method: 'DELETE' });
-        if (res.ok) getTranslations();
-    } catch (e) { alert('Ошибка удаления'); }
+function removeTranslation(id) {
+    if(!confirm('Удалить перевод?')) return;
+    
+    fetch(translationsApiUrl + '/' + id, { method: 'DELETE' })
+    .then(function(response) {
+        if(response.ok) getTranslations();
+    })
+    .catch(function(error) { alert('Ошибка удаления'); });
 }
 
 function resizeTextarea(textarea) {
@@ -152,8 +177,5 @@ function resizeTextarea(textarea) {
     textarea.style.height = textarea.scrollHeight + 'px';
 }
 
-inputFieldTranslation.addEventListener('input', () => resizeTextarea(inputFieldTranslation));
-outputFieldTranslation.addEventListener('input', () => resizeTextarea(outputFieldTranslation));
-
-getItems();
-getTranslations(); 
+inputFieldTranslation.oninput = function() { resizeTextarea(inputFieldTranslation); };
+outputFieldTranslation.oninput = function() { resizeTextarea(outputFieldTranslation); }; 
