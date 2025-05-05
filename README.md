@@ -1,5 +1,5 @@
 # Итоги выполнения задания:
-![image](https://github.com/user-attachments/assets/7b6071ba-5574-495a-a9ec-c2ae5ff06126)
+![image](https://github.com/user-attachments/assets/c11e5f2a-fde7-4fe2-bbd1-460d291ea30b)
 
 * Сделал клиентскую часть (UI) с использованием любых технологий и/или библиотек для GET запроса
 * Реализовал UI для добавления, обновления и удаления.
