@@ -14,7 +14,7 @@ public class User {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonIgnore
     @JoinTable(
             name = "user_translation",

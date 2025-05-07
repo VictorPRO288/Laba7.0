@@ -17,7 +17,7 @@ public class Translation {
     private String sourceLang;
     private String targetLang;
 
-    @ManyToMany(mappedBy = "translations")
+    @ManyToMany(mappedBy = "translations", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<User> users;
 

@@ -28,8 +28,8 @@ public class TranslationService {
 
     @Autowired
     public TranslationService(TranslationRepository translationRepository,
-                              TranslationCache translationCache,
-                              RequestCounterService requestCounterService) {
+        TranslationCache translationCache,
+        RequestCounterService requestCounterService) {
         this.translationRepository = translationRepository;
         this.translationCache = translationCache;
         this.requestCounterService = requestCounterService;
